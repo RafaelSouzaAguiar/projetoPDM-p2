@@ -1,5 +1,6 @@
 import { useState } from 'react';
-
+import { TheCatAPI } from '@thatapicompany/thecatapi';
+import { API_KEY } from '@env'
 import { 
   FlatList,
   Image,
@@ -9,46 +10,50 @@ import {
   View 
 } from 'react-native';
 
+const catApi = new TheCatAPI (API_KEY)
+
 interface Imagem{
-  id: string;
-  url: string;
+  id: string
+  url: string
 }
 
 export default function App() {
   const [imagens, setImagens] = useState<Imagem[]>([])
 
-const gerar = () => {
-  const novaImagem: Imagem = {
-    id: '1',
-    url: 'https://reactnative.dev/img/tiny_logo.png'
+  async function gerar() {
+    const search = await catApi.images.searchImages({
+      limit: 5,
+    }).then(result => setImagens(imagensAtual => [
+      ...result,
+      ...imagensAtual
+    ]))
+    
+    console.log(search)
   }
 
-  setImagens(imagensAtual => [
-    novaImagem,
-    ...imagensAtual
-  ])
-}
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
         Bem-vindo ao busca gatos! Clique no botão abaixo para gerar imagens de gatos</Text>
+
       <Pressable 
         style={styles.pressable}
         onPress={gerar}>
           <Text style={styles.pressableText}>Buscar Gatos</Text>
       </Pressable>
+
       <FlatList
         data={imagens}
         renderItem={imagem => (
-          <Image
-            style={styles.image} 
-            source={{
-              uri: imagem.item.url
-            }}/>
+          <View>
+            <Image
+              style={styles.image} 
+              source={{
+                uri: imagem.item.url
+              }}/>
+          </View>
         )}>
-
       </FlatList>
-      
     </View>
   );
 }
@@ -59,6 +64,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  title:{
+    marginTop: 20,
+    textAlign: 'center'
   },
   pressable:{
     backgroundColor: 'blue',
@@ -71,12 +80,15 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center'
   },
-  title:{
-    marginTop: 20,
-    textAlign: 'center'
+  imageView:{
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    borderRadius: 4,
+    marginBottom: 8
   },
   image: {
-    width: 60,
-    height: 60,
+    margin: 8,
+    width: 200,
+    height: 200,
   },
 });
