@@ -33,8 +33,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        Bem-vindo ao busca gatos! Clique no botão abaixo para gerar imagens de gatos</Text>
+      <Text style={styles.text}>Bem-vindo ao busca gatos!</Text>
+      <Text style={styles.text}>Clique no botão abaixo para gerar 5 imagens gatos.</Text>
 
       <Pressable 
         style={styles.pressable}
@@ -43,15 +43,14 @@ export default function App() {
       </Pressable>
 
       <FlatList
+        style={styles.imageList}
         data={imagens}
         renderItem={imagem => (
-          <View>
             <Image
               style={styles.image} 
               source={{
                 uri: imagem.item.url
               }}/>
-          </View>
         )}>
       </FlatList>
     </View>
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title:{
+  text:{
     marginTop: 20,
     textAlign: 'center'
   },
@@ -80,7 +79,9 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center'
   },
-  imageView:{
+  
+  imageList:{
+    width: '80%',
     borderWidth: 1,
     borderColor: 'lightgray',
     borderRadius: 4,
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
   },
   image: {
     margin: 8,
-    width: 200,
-    height: 200,
+    width: '100%',
+    aspectRatio: 1,
   },
 });
