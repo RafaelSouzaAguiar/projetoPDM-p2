@@ -27,8 +27,10 @@ export default function App() {
       ...result,
       ...imagensAtual
     ]))
-    
-    console.log(search)
+  }
+
+  const remover = (id: string) => {
+    setImagens(imagensAtuais => imagensAtuais.filter(i => i.id !== id))
   }
 
   return (
@@ -45,12 +47,20 @@ export default function App() {
       <FlatList
         style={styles.imageList}
         data={imagens}
+        keyExtractor={item => item.id}
         renderItem={imagem => (
+          <View>
             <Image
               style={styles.image} 
               source={{
                 uri: imagem.item.url
               }}/>
+            <Pressable 
+              style={styles.pressableRemover}
+              onPress={() => remover(imagem.item.id)}>
+                <Text style={styles.pressableText}>Remover este gato</Text>
+            </Pressable>
+          </View>
         )}>
       </FlatList>
     </View>
@@ -75,6 +85,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     margin: 8
   },
+  pressableRemover:{
+    backgroundColor: 'red',
+    width: '95%',
+    padding: 8,
+    borderRadius: 4,
+    marginLeft: 8,
+    marginBottom: 10
+  },
   pressableText: {
     color: 'white',
     textAlign: 'center'
@@ -89,7 +107,7 @@ const styles = StyleSheet.create({
   },
   image: {
     margin: 8,
-    width: '100%',
+    width: '95%',
     aspectRatio: 1,
   },
 });
